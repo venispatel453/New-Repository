@@ -54,10 +54,10 @@ function Project() {
       const response = await axios.get(`/download-pdf/${project_id}`, {
         responseType: "arraybuffer",
       });
+      console.log('hrf.hdbfk.erfr.');
 
       // Convert the array buffer received from the server to a Blob
       const pdfBlob = new Blob([response.data], { type: "application/pdf" });
-
       // Use file-saver to save the PDF file locally
       saveAs(pdfBlob, "output.pdf");
       setLoading(false);
