@@ -1,7 +1,7 @@
 FROM node AS Frontend
 WORKDIR /usr/src/app
 RUN ls -l
-COPY package.json ./
+COPY package.json .
 RUN npm install 
 COPY . .
 RUN npm run build
