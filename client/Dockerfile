@@ -1,4 +1,4 @@
-FROM node:latest AS Frontend
+FROM node:21 AS Frontend
 WORKDIR /usr/src/app
 COPY package*.json .
 RUN npm install 
