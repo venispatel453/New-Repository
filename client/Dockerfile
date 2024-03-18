@@ -1,5 +1,6 @@
 FROM node AS Frontend
 WORKDIR /usr/src/app
+RUN ls -l
 COPY package.json ./
 RUN npm install 
 COPY . .
