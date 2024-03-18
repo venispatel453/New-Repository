@@ -1,13 +1,13 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:ap-south-1:730335283190:task-definition/frontend-task:4",
+    "taskDefinitionArn": "arn:aws:ecs:ap-south-1:730335283190:task-definition/front-task:5",
     "containerDefinitions": [
         {
-            "name": "frontend-task",
-            "image": "730335283190.dkr.ecr.ap-south-1.amazonaws.com/frontend",
+            "name": "frontend",
+            "image": "730335283190.dkr.ecr.ap-south-1.amazonaws.com/frontend-repo",
             "cpu": 0,
             "portMappings": [
                 {
-                    "name": "frontend-task-3000-tcp",
+                    "name": "frontend-3000-tcp",
                     "containerPort": 3000,
                     "hostPort": 3000,
                     "protocol": "tcp",
@@ -24,7 +24,7 @@
                 "logDriver": "awslogs",
                 "options": {
                     "awslogs-create-group": "true",
-                    "awslogs-group": "/ecs/frontend-task",
+                    "awslogs-group": "/ecs/front-task",
                     "awslogs-region": "ap-south-1",
                     "awslogs-stream-prefix": "ecs"
                 },
@@ -33,10 +33,10 @@
             "systemControls": []
         }
     ],
-    "family": "frontend-task",
+    "family": "front-task",
     "taskRoleArn": "arn:aws:iam::730335283190:role/ecsTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::730335283190:role/ecsTaskExecutionRole",
-    "revision": 4,
+    "revision": 5,
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
@@ -72,13 +72,13 @@
     "requiresCompatibilities": [
         "EC2"
     ],
-    "cpu": "307",
-    "memory": "307",
+    "cpu": "1024",
+    "memory": "1024",
     "runtimePlatform": {
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2024-03-18T10:45:38.634Z",
+    "registeredAt": "2024-03-18T14:48:33.646Z",
     "registeredBy": "arn:aws:iam::730335283190:root",
     "tags": []
 }
