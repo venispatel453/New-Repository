@@ -38,6 +38,18 @@ jobs:
         with: 
           mask-password: 'true'
 
+          # Build and pushing frontend image to ECR
+      - name: Build, tag, and push backend image to Amazon ECR
+        id: build-backend-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+          REPOSITORY: backend
+        run: |
+          docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG -f server/Dockerfile .
+          docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
+          echo "backend_image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_ENV
+
       # Build and pushing frontend image to ECR
       - name: Build, tag, and push frontend image to Amazon ECR
         id: build-frontend-image
@@ -50,17 +62,14 @@ jobs:
           docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
           echo "frontend_image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_ENV
 
-      # Build and pushing frontend image to ECR
-      - name: Build, tag, and push backend image to Amazon ECR
-        id: build-backend-image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: latest
-          REPOSITORY: backend
-        run: |
-          docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG -f server/Dockerfile .
-          docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
-          echo "backend_image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_ENV
+      # Attaching Backend Image to task definition 
+      - name: Fill in the new backend image ID in the Amazon ECS task definition
+        id: task-def-backend
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: backend-task-definition.json
+          container-name: ${{ env.CONTAINER_NAME_BACKEND }}
+          image: ${{ steps.build-backend-image.outputs.backend_image }}
 
       # Attaching Frontend Image to task definition 
       - name: Fill in the new frontend image ID in the Amazon ECS task definition
@@ -71,14 +80,7 @@ jobs:
           container-name: ${{ env.CONTAINER_NAME_FRONTEND }}
           image: ${{ steps.build-frontend-image.outputs.frontend_image }}
 
-      # Attaching Backend Image to task definition 
-      - name: Fill in the new backend image ID in the Amazon ECS task definition
-        id: task-def-backend
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: backend-task-definition.json
-          container-name: ${{ env.CONTAINER_NAME_BACKEND }}
-          image: ${{ steps.build-backend-image.outputs.backend_image }}
+      
 
       # Deploying frontend task definition of frontend 
       - name: Deploy Amazon ECS Task Definitions for Frontend
