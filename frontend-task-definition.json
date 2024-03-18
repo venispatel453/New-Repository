@@ -1,5 +1,5 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:ap-south-1:730335283190:task-definition/frontend-task:1",
+    "taskDefinitionArn": "arn:aws:ecs:ap-south-1:730335283190:task-definition/front-task:1",
     "containerDefinitions": [
         {
             "name": "frontend",
@@ -31,7 +31,7 @@
                 "logDriver": "awslogs",
                 "options": {
                     "awslogs-create-group": "true",
-                    "awslogs-group": "/ecs/frontend-task",
+                    "awslogs-group": "/ecs/front-task",
                     "awslogs-region": "ap-south-1",
                     "awslogs-stream-prefix": "ecs"
                 },
@@ -40,7 +40,7 @@
             "systemControls": []
         }
     ],
-    "family": "frontend-task",
+    "family": "front-task",
     "taskRoleArn": "arn:aws:iam::730335283190:role/ecsTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::730335283190:role/ecsTaskExecutionRole",
     "revision": 1,
@@ -79,13 +79,13 @@
     "requiresCompatibilities": [
         "EC2"
     ],
-    "cpu": "1024",
-    "memory": "3072",
+    "cpu": "307",
+    "memory": "307",
     "runtimePlatform": {
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2024-03-18T06:45:06.165Z",
+    "registeredAt": "2024-03-18T10:16:44.071Z",
     "registeredBy": "arn:aws:iam::730335283190:root",
     "tags": []
 }
