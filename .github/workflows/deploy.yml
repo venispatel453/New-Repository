@@ -1,79 +1,99 @@
-name: Deploy Customer Success Platform on ECS
+name: Deploy to Amazon ECS
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+# Environment Variables
 env:
-    AWS_REGION: ap-south-1
-    ECR_REPOSITORY: customer_success_platform_repository
-    ECS_SERVICE: Service_For_Customer_Success_Platform
-    ECS_CLUSTER: Customer_Success_Platform_Cluster
-    ECS_TASK_DEFINITION: Customer_Succcess_Platorm_Task_Definition-revision1.json
-    CONTAINER_NAME_1: Customer_Success_Container_Angular
-    CONTAINER_NAME_2: Customer_Success_Container_dotnet
-    CONTAINER_NAME_3: Customer_Success_Container_Postgres
+  AWS_REGION: ap-south-1
+  ECS_SERVICE_FRONTEND: frontend-service 
+  ECS_SERVICE_BACKEND: backend-service 
+  ECS_CLUSTER: VenisECSClusterProject
+  CONTAINER_NAME_FRONTEND: frontend
+  CONTAINER_NAME_BACKEND: backend
+
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
     environment: production
+
     steps:
-        - name: Checkout
-          uses: actions/checkout@v4
-        - name: Configure AWS credentials
-          uses: aws-actions/configure-aws-credentials@0e613a0980cbf65ed5b322eb7a1e075d28913a83
-          with:
-            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            aws-region: ap-south-1
-        - name: Login to Amazon ECR
-          id: login-ecr
-          uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
-        - name: Install Docker Compose
-          run: |
-            sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
-        - name: Build Docker images
-          env:
-            DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-            DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          run: |
-            docker-compose build
-            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-            docker-compose push
-  #      - name: Build and push Docker images
- #         uses: docker/build-push-action@v2
- #         with:
-   #         context: .
-  #          file: docker-compose.yaml
-  #          push: true
-  #          tags: |
-   #           ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:Angular
-#            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:dotnet
-   #           ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:postgres
-        # - name: Fill in the new image ID in the Amazon ECS task definition
-        #   id: task-def
-        #   uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
-        #   with:
-        #     definition: ${{ env.ECS_TASK_DEFINITION }}
-        #     container-name: ${{ env.CONTAINER_NAME_2 }}
-        #     image: ${{ steps.build-image.outputs.image }}
-        # - name: Fill in the new image ID in the Amazon ECS task definition for Angular container
-        #   id: task-def-angular
-        #   uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
-        #   with:
-        #     definition: ${{ env.ECS_TASK_DEFINITION }}
-        #     container-name: ${{ env.CONTAINER_NAME_1 }}  # Angular container
-        #     image: ${{ steps.build-image.outputs.image }}
-        # - name: Fill in the new image ID in the Amazon ECS task definition for Postgres container
-        #   id: task-def-postgres
-        #   uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
-        #   with:
-        #     definition: ${{ env.ECS_TASK_DEFINITION }}
-        #     container-name: ${{ env.CONTAINER_NAME_3 }}  # Postgres container
-        #     image: ${{ steps.build-image.outputs.image }}
-        # - name: Deploy Amazon ECS task definition
-        #   uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a
-        #   with:
-        #     task-definition: ${{ steps.task-def.outputs.task-definition }}
-        #     service: ${{ env.ECS_SERVICE }}
-        #     cluster: ${{ env.ECS_CLUSTER }}
-        #     wait-for-service-stability: true
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Configuring AWS Credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # Login to Amazon ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+        with: 
+          mask-password: 'true'
+
+      # Build and pushing frontend image to ECR
+      - name: Build, tag, and push frontend image to Amazon ECR
+        id: build-frontend-image
+        env: 
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+          REPOSITORY: frontend
+        run: |
+          docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG -f frontend/Dockerfile .
+          docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
+          echo "frontend_image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_ENV
+
+      # Build and pushing frontend image to ECR
+      - name: Build, tag, and push backend image to Amazon ECR
+        id: build-backend-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+          REPOSITORY: backend
+        run: |
+          docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG -f backend/Dockerfile .
+          docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
+          echo "backend_image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_ENV
+
+      # Attaching Frontend Image to task definition 
+      - name: Fill in the new frontend image ID in the Amazon ECS task definition
+        id: task-def-frontend
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: frontend-task-definition.json
+          container-name: ${{ env.CONTAINER_NAME_FRONTEND }}
+          image: ${{ steps.build-frontend-image.outputs.frontend_image }}
+
+      # Attaching Backend Image to task definition 
+      - name: Fill in the new backend image ID in the Amazon ECS task definition
+        id: task-def-backend
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: backend-task-definition.json
+          container-name: ${{ env.CONTAINER_NAME_BACKEND }}
+          image: ${{ steps.build-backend-image.outputs.backend_image }}
+
+      # Deploying frontend task definition of frontend 
+      - name: Deploy Amazon ECS Task Definitions for Frontend
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def-frontend.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE_FRONTEND }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
+
+      # Deploying frontend task definition of backend 
+      - name: Deploy Amazon ECS Task Definitions for Backend
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def-backend.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE_BACKEND }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
