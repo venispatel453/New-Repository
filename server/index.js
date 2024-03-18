@@ -24,7 +24,7 @@ const { createAdmin, checkUser } = require("./controllers/userController");
 
 /* CONFIGURATIONS */
 dotenv.config();
-const PORT = process.env.PORT || 4004;
+const PORT = process.env.PORT || 8000;
 
 /* EXPRESS CONFIGURATIONS */
 const app = express();
@@ -41,7 +41,7 @@ app.use(express.urlencoded({ extended: false }));
 
 /* STARTUP */
 app.listen(PORT, () =>
-  console.log(`Server started on http://localhost:${PORT}`)
+  console.log(`Server started on http://ec2-13-126-66-156.ap-south-1.compute.amazonaws.com:${PORT}`)
 );
 connectDB();
 

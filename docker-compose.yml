@@ -13,7 +13,7 @@ services:
       context: ./server
       dockerfile: Dockerfile
     ports:
-      - "4004:4004"
+      - "8000:8000"
     environment:
       - MONGODB_URI=mongodb://mongo:27017/mydatabase
     depends_on:
