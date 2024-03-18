@@ -1,8 +1,8 @@
-FROM node:21 AS Backend
+FROM node AS Backend
 WORKDIR /usr/src/app
 COPY package*.json ./
-COPY . .
-RUN npm install 
+RUN npm install --production
+COPY ..
 
 EXPOSE 8000
 CMD ["node", "index.js"]
