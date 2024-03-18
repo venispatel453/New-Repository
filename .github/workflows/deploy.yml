@@ -46,7 +46,7 @@ jobs:
           IMAGE_TAG: latest
           REPOSITORY: frontend
         run: |
-          docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG -f frontend/Dockerfile .
+          docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG -f client/Dockerfile .
           docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
           echo "frontend_image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_ENV
 
@@ -58,7 +58,7 @@ jobs:
           IMAGE_TAG: latest
           REPOSITORY: backend
         run: |
-          docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG -f backend/Dockerfile .
+          docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG -f server/Dockerfile .
           docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
           echo "backend_image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_ENV
 
