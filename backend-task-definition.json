@@ -1,5 +1,5 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:ap-south-1:730335283190:task-definition/backend-task:1",
+    "taskDefinitionArn": "arn:aws:ecs:ap-south-1:730335283190:task-definition/back-task:2",
     "containerDefinitions": [
         {
             "name": "backend",
@@ -31,7 +31,7 @@
                 "logDriver": "awslogs",
                 "options": {
                     "awslogs-create-group": "true",
-                    "awslogs-group": "/ecs/backend-task",
+                    "awslogs-group": "/ecs/back-task",
                     "awslogs-region": "ap-south-1",
                     "awslogs-stream-prefix": "ecs"
                 },
@@ -40,10 +40,10 @@
             "systemControls": []
         }
     ],
-    "family": "backend-task",
+    "family": "back-task",
     "taskRoleArn": "arn:aws:iam::730335283190:role/ecsTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::730335283190:role/ecsTaskExecutionRole",
-    "revision": 1,
+    "revision": 2,
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
@@ -79,13 +79,13 @@
     "requiresCompatibilities": [
         "EC2"
     ],
-    "cpu": "1024",
-    "memory": "3072",
+    "cpu": "307",
+    "memory": "307",
     "runtimePlatform": {
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2024-03-18T06:46:47.834Z",
+    "registeredAt": "2024-03-18T10:19:55.828Z",
     "registeredBy": "arn:aws:iam::730335283190:root",
     "tags": []
 }
