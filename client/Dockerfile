@@ -1,8 +1,8 @@
 FROM node AS Frontend
-WORKDIR /usr/src/app
-COPY package*.json ./
+WORKDIR /usr/src/app/client
+COPY client/package*.json ./
 RUN npm install 
-COPY . .
+COPY client/ .
 
 EXPOSE 3000 
 CMD ["npm", "run" "start"]
