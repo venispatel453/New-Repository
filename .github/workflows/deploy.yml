@@ -9,7 +9,7 @@ env:
   AWS_REGION: ap-south-1
   ECS_SERVICE_FRONTEND: Project-frontend-service
   ECS_SERVICE_BACKEND: Project-backend-service
-  ECS_CLUSTER: VenisProjectCluster
+  ECS_CLUSTER: MehulProjectCluster
   CONTAINER_NAME_FRONTEND: frontend
   CONTAINER_NAME_BACKEND: backend
 
