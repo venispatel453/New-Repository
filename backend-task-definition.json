@@ -1,5 +1,5 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:ap-south-1:730335283190:task-definition/mehul-backend-task:1",
+    "taskDefinitionArn": "arn:aws:ecs:ap-south-1:730335283190:task-definition/mehul-project-task-backend:1",
     "containerDefinitions": [
         {
             "name": "backend",
@@ -7,17 +7,11 @@
             "cpu": 0,
             "portMappings": [
                 {
-                    "name": "backend-80-tcp",
-                    "containerPort": 80,
-                    "hostPort": 0,
-                    "protocol": "tcp",
-                    "appProtocol": "http"
-                },
-                {
                     "name": "backend-8000-tcp",
                     "containerPort": 8000,
-                    "hostPort": 0,
-                    "protocol": "tcp"
+                    "hostPort": 8000,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
                 }
             ],
             "essential": true,
@@ -30,7 +24,7 @@
                 "logDriver": "awslogs",
                 "options": {
                     "awslogs-create-group": "true",
-                    "awslogs-group": "/ecs/mehul-backend-task",
+                    "awslogs-group": "/ecs/mehul-project-task-frontend",
                     "awslogs-region": "ap-south-1",
                     "awslogs-stream-prefix": "ecs"
                 },
@@ -39,7 +33,7 @@
             "systemControls": []
         }
     ],
-    "family": "mehul-backend-task",
+    "family": "mehul-project-task-backend",
     "taskRoleArn": "arn:aws:iam::730335283190:role/ecsTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::730335283190:role/ecsTaskExecutionRole",
     "revision": 1,
@@ -84,7 +78,7 @@
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2024-04-02T07:19:19.233Z",
+    "registeredAt": "2024-04-02T08:30:07.375Z",
     "registeredBy": "arn:aws:iam::730335283190:root",
     "tags": []
 }
