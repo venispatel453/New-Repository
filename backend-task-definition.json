@@ -1,5 +1,5 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:ap-south-1:730335283190:task-definition/back-task:3",
+    "taskDefinitionArn": "arn:aws:ecs:ap-south-1:730335283190:task-definition/mehul-backend-task:1",
     "containerDefinitions": [
         {
             "name": "backend",
@@ -7,11 +7,17 @@
             "cpu": 0,
             "portMappings": [
                 {
-                    "name": "backend-8000-tcp",
-                    "containerPort": 8000,
-                    "hostPort": 8000,
+                    "name": "backend-80-tcp",
+                    "containerPort": 80,
+                    "hostPort": 0,
                     "protocol": "tcp",
                     "appProtocol": "http"
+                },
+                {
+                    "name": "backend-8000-tcp",
+                    "containerPort": 8000,
+                    "hostPort": 0,
+                    "protocol": "tcp"
                 }
             ],
             "essential": true,
@@ -24,7 +30,7 @@
                 "logDriver": "awslogs",
                 "options": {
                     "awslogs-create-group": "true",
-                    "awslogs-group": "/ecs/back-task",
+                    "awslogs-group": "/ecs/mehul-backend-task",
                     "awslogs-region": "ap-south-1",
                     "awslogs-stream-prefix": "ecs"
                 },
@@ -33,10 +39,10 @@
             "systemControls": []
         }
     ],
-    "family": "back-task",
+    "family": "mehul-backend-task",
     "taskRoleArn": "arn:aws:iam::730335283190:role/ecsTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::730335283190:role/ecsTaskExecutionRole",
-    "revision": 3,
+    "revision": 1,
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
@@ -72,13 +78,13 @@
     "requiresCompatibilities": [
         "EC2"
     ],
-    "cpu": "512",
+    "cpu": "1024",
     "memory": "512",
     "runtimePlatform": {
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2024-03-18T14:51:30.773Z",
+    "registeredAt": "2024-04-02T07:19:19.233Z",
     "registeredBy": "arn:aws:iam::730335283190:root",
     "tags": []
 }
