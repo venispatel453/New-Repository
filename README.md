@@ -1,3 +1,24 @@
+**GitHub Links with Explanation:**
+
+1. [Terraform_vpc](https://github.com/venispatel453/Terraform_vpc)
+   - This repository contains Terraform code for provisioning Virtual Private Cloud (VPC) resources on AWS. It includes configurations for subnets, route tables, internet gateways, and other networking components.
+
+2. [Terraform_Instance](https://github.com/venispatel453/Terraform_Instance)
+   - The Terraform code in this repository focuses on provisioning EC2 instances on AWS. It covers instance types, security groups, key pairs, and other instance-related configurations.
+
+3. [Terraform_asg](https://github.com/venispatel453/Terraform_asg)
+   - This repository contains Terraform configurations for creating Auto Scaling Groups (ASG) on AWS. It includes settings for launch configurations, scaling policies, and load balancer integration.
+
+4. [Terraform_ecs](https://github.com/venispatel453/Terraform_ecs)
+   - The Terraform code in this repository is dedicated to provisioning resources for Amazon ECS (Elastic Container Service). It covers task definitions, services, clusters, and other ECS-related configurations.
+
+5. [Terraform_alb](https://github.com/venispatel453/Terraform_alb)
+   - This repository focuses on Terraform code for provisioning Application Load Balancers (ALB) on AWS. It includes listener rules, target groups, and other configurations related to ALB setup.
+
+These repositories contain infrastructure as code (IaC) configurations using Terraform, enabling automated provisioning and management of AWS resources. They demonstrate best practices for infrastructure automation and can serve as valuable learning resources for Terraform practitioners.
+
+
+
 # Deploy to Amazon ECS Workflow
 
 This GitHub Actions workflow automates the deployment process to Amazon ECS (Elastic Container Service) for a project consisting of frontend and backend services. When changes are pushed to the main branch, this workflow triggers and deploys the updated Docker container images to ECS.
